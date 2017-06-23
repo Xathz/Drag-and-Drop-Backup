@@ -18,6 +18,14 @@ The default one will be created when you run the program for the first time. The
 
 The date and time formatting at [Github](https://github.com/dotnet/docs/blob/master/docs/standard/base-types/custom-date-and-time-format-strings.md) or [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
 
+##### NameFormat:
+
+|Variable|Meaning|Required|
+|---|---|---|
+|%F|File name (auto generated)|Yes|
+|%D|Date|No|
+|%T|Time|No|
+
 ##### Example:
 
 ```json
