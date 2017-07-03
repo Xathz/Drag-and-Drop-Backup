@@ -9,7 +9,7 @@ namespace DragAndDropBackup {
 
         /// <summary>
         /// Settings file location.
-        /// Automatically set, will the the same name as the executable, .settings will be the file extension.
+        /// Automatically set, will be the same name as the executable, .settings will be the file extension.
         /// </summary>
         private readonly string _SettingsLocation = "";
 
