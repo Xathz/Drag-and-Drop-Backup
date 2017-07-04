@@ -10,7 +10,12 @@ Most of it can be configured with a settings file written in JSON.
 
 Whatever you drag and drop into the program will be zipped using 7-Zip and saved to the directory where you dragged everything from.
 
-If you have the flag ```--autocopy``` set then when it is finished creating the zip file it will also be copied to the paths you set in the settings file.
+##### Command line switches
+
+|Switch|What it does|
+|---|---|
+|```--autocopy```|When the zip is created it will also be copied to the paths you set in the settings file.|
+|```--elevate```|Elevates the 7-Zip process when launched. Will run as an admin to read/write the zip.|
 
 ### Settings file?
 
@@ -18,7 +23,7 @@ The default one will be created when you run the program for the first time. The
 
 The date and time formatting at [Github](https://github.com/dotnet/docs/blob/master/docs/standard/base-types/custom-date-and-time-format-strings.md) or [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
 
-##### NameFormat:
+##### NameFormat
 
 |Variable|Meaning|Required|
 |---|---|---|
@@ -26,7 +31,7 @@ The date and time formatting at [Github](https://github.com/dotnet/docs/blob/mas
 |%D|Date|No|
 |%T|Time|No|
 
-##### Example:
+##### Example
 
 ```json
 {
@@ -48,3 +53,6 @@ The date and time formatting at [Github](https://github.com/dotnet/docs/blob/mas
   }
 }
 ```
+### Known issues
+
+You cannot drag and drop between windows with different elevations. [Explanation](https://blogs.msdn.microsoft.com/patricka/2010/01/28/q-why-doesnt-drag-and-drop-work-when-my-application-is-running-elevated-a-mandatory-integrity-control-and-uipi).
