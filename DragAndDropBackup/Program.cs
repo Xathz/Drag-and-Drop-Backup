@@ -19,6 +19,9 @@ namespace DragAndDropBackup {
                 if (arg.Trim() == "--autocopy") {
                     mainForm.DoAutocopy = true;
                 }
+                if (arg.Trim() == "--elevate") {
+                    mainForm.Elevate = true;
+                }
             }
   
             Application.Run(mainForm);

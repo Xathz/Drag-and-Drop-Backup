@@ -12,6 +12,7 @@ namespace DragAndDropBackup {
 
         public Settings ThisSettings = new Settings();
         public bool DoAutocopy = false;
+        public bool Elevate = false;
         private bool _IsMouseDown = false;
         private Point _FirstPoint;
 
@@ -191,6 +192,10 @@ namespace DragAndDropBackup {
                         WindowStyle = ProcessWindowStyle.Hidden
                     }
                 };
+
+                if (Elevate == true) {
+                    sevenZipProcess.StartInfo.Verb = "runas";
+                }
 
                 sevenZipProcess.Start();
                 sevenZipProcess.WaitForExit();
