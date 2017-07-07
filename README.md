@@ -1,4 +1,4 @@
-# Drag and Drop Backup
+# Drag and Drop Backup [![Build Status](https://travis-ci.org/Xathz/Drag-and-Drop-Backup.svg?branch=master)](https://travis-ci.org/Xathz/Drag-and-Drop-Backup)
 Drag and drop files into the window to compress them into a zip file using 7-Zip (not included)
 
 ### Why?
