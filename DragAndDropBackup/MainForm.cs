@@ -170,7 +170,7 @@ namespace DragAndDropBackup {
             workingName = Path.Combine(workingDirectory, tempFileName);
 
             if (File.Exists(workingName)) {
-                MessageBox.Show("There is a file where the backup zip is trying to be saved with the same name.\r\n\r\n" + workingName + "\r\n\r\nBackup will exit when you click OK.", "Backup zip already exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"There is a file where the backup zip is trying to be saved with the same name.\r\n\r\n{workingName}\r\n\r\nBackup will exit when you click OK.", "Backup zip already exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
 
@@ -201,7 +201,7 @@ namespace DragAndDropBackup {
                 sevenZipProcess.WaitForExit();
 
             } catch (FileNotFoundException e) {
-                MessageBox.Show(e.Message + "\r\n\r\n7z.exe was expected at: " + sevenZip, "7-Zip not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{e.Message}\r\n\r\n7z.exe was expected at: {sevenZip}", "7-Zip not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
 
             } catch (Exception e) {
@@ -212,6 +212,9 @@ namespace DragAndDropBackup {
                 DoBackupBackgroundWorker.ReportProgress(100);
 
                 if (File.Exists(workingName)) {
+                    long fileSize = new FileInfo(workingName).Length;
+                    string fileSizeFormatted = BytesToString(fileSize);
+
                     if (DoAutocopy) {
                         try {
                             string tempWorkingName = new FileInfo(workingName).Name;
@@ -223,7 +226,7 @@ namespace DragAndDropBackup {
                                 File.Copy(workingName, copyTo, false);
                             }
 
-                            MessageBox.Show("Zip file saved to: " + workingName + "\r\n\r\nZip file was also copied to:\r\n\r\n" + tempWorkingNames, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Zip file saved to: {workingName}\r\n(size {fileSizeFormatted})\r\n\r\nZip file was also copied to:\r\n\r\n{tempWorkingNames}", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Application.Exit();
                         } catch (Exception e) {
                             MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -231,7 +234,7 @@ namespace DragAndDropBackup {
                         }
 
                     } else {
-                        MessageBox.Show("Zip file saved to: " + workingName, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"Zip file saved to: {workingName}\r\n(size {fileSizeFormatted})", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Application.Exit();
 
                     }
@@ -244,7 +247,16 @@ namespace DragAndDropBackup {
             }
         }
 
+        private string BytesToString(long byteCount) {
+            // From https://stackoverflow.com/a/4975942
+            string[] suffix = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            if (byteCount == 0) { return $"0 {suffix[0]} "; }
+
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return $"{(Math.Sign(byteCount) * num).ToString()} {suffix[place]}";
+        }
 
     }
-
 }
