@@ -15,6 +15,7 @@ namespace DragAndDropBackup {
         public bool Elevate = false;
         private bool _IsMouseDown = false;
         private Point _FirstPoint;
+        private string _TempFile;
 
         public MainForm() {
             InitializeComponent();
@@ -41,19 +42,20 @@ namespace DragAndDropBackup {
         private void MainForm_DragDrop(object sender, DragEventArgs e) {
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (droppedFiles == null) { return; }
-
-            StringBuilder fileList = new StringBuilder();
             string firstItem = droppedFiles[0];
 
-            foreach (string droppedFile in droppedFiles) {
-                fileList.Append("\"" + droppedFile + "\" ");
-            }
-
-            string workingFiles = fileList.ToString().Trim();
+            string workingFileList = Path.GetTempFileName();
+            _TempFile = workingFileList;
             string workingDirectory = Path.GetDirectoryName(firstItem);
             string workingName = null;
 
             FileAttributes firstItem_Attributes = File.GetAttributes(firstItem);
+
+            StringBuilder fileList = new StringBuilder();
+            foreach (string file in droppedFiles) {
+                fileList.AppendLine(file);
+            }
+            File.WriteAllText(workingFileList, fileList.ToString(), Encoding.UTF8);
 
             // Example Path: C:\TopDirectory\SubDirectory\SomeFile.txt
             if (droppedFiles.Length == 1) { // If there is only one dropped file or directory.
@@ -94,11 +96,11 @@ namespace DragAndDropBackup {
 #if DEBUG
             Debug.WriteLine(workingName);
             Debug.WriteLine(workingDirectory);
-            Debug.WriteLine(workingFiles);
+            Debug.WriteLine(workingFileList);
 #endif
 
             DoBackupBackgroundWorker_Arguments workerArgs = new DoBackupBackgroundWorker_Arguments() {
-                WorkingFiles = workingFiles,
+                WorkingFileList = workingFileList,
                 WorkingDirectory = workingDirectory,
                 WorkingName = workingName
             };
@@ -137,14 +139,14 @@ namespace DragAndDropBackup {
         }
 
         private class DoBackupBackgroundWorker_Arguments {
-            public string WorkingFiles { get; set; }
+            public string WorkingFileList { get; set; }
             public string WorkingDirectory { get; set; }
             public string WorkingName { get; set; }
         }
 
         private void DoBackupBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
             DoBackupBackgroundWorker_Arguments workerArgs = (DoBackupBackgroundWorker_Arguments)e.Argument;
-            BackupFiles(workerArgs.WorkingFiles, workerArgs.WorkingDirectory, workerArgs.WorkingName);
+            BackupFiles(workerArgs.WorkingFileList, workerArgs.WorkingDirectory, workerArgs.WorkingName);
         }
 
         private void DoBackupBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -154,7 +156,7 @@ namespace DragAndDropBackup {
             }
         }
 
-        private void BackupFiles(string workingFiles, string workingDirectory, string workingName) {
+        private void BackupFiles(string workingFileList, string workingDirectory, string workingName) {
             string sevenZip = ThisSettings.CurrentSettings.Backup.SevenZip;
             // M-d-yyyy
             string dateDate = DateTime.Now.ToString(ThisSettings.CurrentSettings.Backup.DateFormat).ToLower();
@@ -174,7 +176,7 @@ namespace DragAndDropBackup {
                 Application.Exit();
             }
 
-            string sevenZipArguments = "a \"" + workingName + "\" " + workingFiles;
+            string sevenZipArguments = "a \"" + workingName + "\" " + $"@{workingFileList}";
 
 #if DEBUG  
             Debug.WriteLine(dateTime);
@@ -210,6 +212,8 @@ namespace DragAndDropBackup {
 
             } finally {
                 DoBackupBackgroundWorker.ReportProgress(100);
+
+                try { File.Delete(_TempFile); } catch { }
 
                 if (File.Exists(workingName)) {
                     long fileSize = new FileInfo(workingName).Length;
