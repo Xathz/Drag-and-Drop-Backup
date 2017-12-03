@@ -16,11 +16,12 @@ namespace DragAndDropBackup {
             MainForm mainForm = new MainForm();
 
             foreach (string arg in args) {
-                if (arg.Trim() == "--autocopy") {
-                    mainForm.DoAutocopy = true;
+                string currentArg = arg.Trim();
+                if (currentArg == "--autocopy") {
+                    mainForm.Settings.CurrentSettings.Arguments.DoAutocopy = true;
                 }
-                if (arg.Trim() == "--elevate") {
-                    mainForm.Elevate = true;
+                if (currentArg == "--elevate") {
+                    mainForm.Settings.CurrentSettings.Arguments.Elevate = true;
                 }
             }
   

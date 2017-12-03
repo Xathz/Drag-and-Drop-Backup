@@ -70,6 +70,12 @@ namespace DragAndDropBackup {
             /// Backup settings.
             /// </summary>
             public Backup Backup { get; set; } = new Backup();
+
+            /// <summary>
+            /// Set arguments. Does not get saved to disk.
+            /// </summary>
+            [JsonIgnore]
+            public Arguments Arguments { get; set; } = new Arguments();
         }
 
         public class General {
@@ -127,6 +133,19 @@ namespace DragAndDropBackup {
             /// Position Y. Default: 520
             /// </summary>
             public int Y { get; set; } = 520;
+        }
+
+        public class Arguments {
+
+            /// <summary>
+            /// When the zip is created it will also be copied to the paths you set in the settings file.
+            /// </summary>
+            public bool DoAutocopy { get; set; }  = false;
+
+            /// <summary>
+            /// Elevates the 7-Zip process when launched. Will run as an admin to read/write the zip.
+            /// </summary>
+            public bool Elevate { get; set; } = false;
         }
 
     }

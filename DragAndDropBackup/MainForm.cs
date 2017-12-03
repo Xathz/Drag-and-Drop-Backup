@@ -10,11 +10,9 @@ namespace DragAndDropBackup {
 
     public partial class MainForm : Form {
 
-        public Settings ThisSettings = new Settings();
-        public bool DoAutocopy = false;
-        public bool Elevate = false;
-        private bool _IsMouseDown = false;
+        public Settings Settings = new Settings();
         private Point _FirstPoint;
+        private bool _IsMouseDown = false;
         private string _TempFile;
 
         public MainForm() {
@@ -22,7 +20,7 @@ namespace DragAndDropBackup {
 
             // Icon from https://icons8.com/icon/1039/data-backup, https://icons8.com/license
             Icon = Properties.Resources.BackupIcon;
-            Location = new Point(ThisSettings.CurrentSettings.General.WindowLocation.X, ThisSettings.CurrentSettings.General.WindowLocation.Y);
+            Location = new Point(Settings.CurrentSettings.General.WindowLocation.X, Settings.CurrentSettings.General.WindowLocation.Y);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -30,7 +28,7 @@ namespace DragAndDropBackup {
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            ThisSettings.SaveSettings();
+            Settings.SaveSettings();
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e) {
@@ -113,8 +111,8 @@ namespace DragAndDropBackup {
         }
 
         private void MainForm_LocationChanged(object sender, EventArgs e) {
-            ThisSettings.CurrentSettings.General.WindowLocation.X = Location.X;
-            ThisSettings.CurrentSettings.General.WindowLocation.Y = Location.Y;
+            Settings.CurrentSettings.General.WindowLocation.X = Location.X;
+            Settings.CurrentSettings.General.WindowLocation.Y = Location.Y;
         }
 
         private void InfoLabel_MouseDown(object sender, MouseEventArgs e) {
@@ -157,13 +155,13 @@ namespace DragAndDropBackup {
         }
 
         private void BackupFiles(string workingFileList, string workingDirectory, string workingName) {
-            string sevenZip = ThisSettings.CurrentSettings.Backup.SevenZip;
+            string sevenZip = Settings.CurrentSettings.Backup.SevenZip;
             // M-d-yyyy
-            string dateDate = DateTime.Now.ToString(ThisSettings.CurrentSettings.Backup.DateFormat).ToLower();
+            string dateDate = DateTime.Now.ToString(Settings.CurrentSettings.Backup.DateFormat).ToLower();
             // h.mmtt
-            string dateTime = DateTime.Now.ToString(ThisSettings.CurrentSettings.Backup.TimeFormat).ToLower();
+            string dateTime = DateTime.Now.ToString(Settings.CurrentSettings.Backup.TimeFormat).ToLower();
 
-            string tempFileName = ThisSettings.CurrentSettings.Backup.NameFormat;
+            string tempFileName = Settings.CurrentSettings.Backup.NameFormat;
 
             tempFileName = tempFileName.Replace("%F", workingName);
             tempFileName = tempFileName.Replace("%D", dateDate);
@@ -195,7 +193,7 @@ namespace DragAndDropBackup {
                     }
                 };
 
-                if (Elevate == true) {
+                if (Settings.CurrentSettings.Arguments.Elevate == true) {
                     sevenZipProcess.StartInfo.Verb = "runas";
                 }
 
@@ -219,11 +217,11 @@ namespace DragAndDropBackup {
                     long fileSize = new FileInfo(workingName).Length;
                     string fileSizeFormatted = BytesToString(fileSize);
 
-                    if (DoAutocopy) {
+                    if (Settings.CurrentSettings.Arguments.DoAutocopy) {
                         try {
                             string tempWorkingName = new FileInfo(workingName).Name;
                             string tempWorkingNames = "";
-                            foreach (string copyLocation in ThisSettings.CurrentSettings.Backup.CopyTo) {
+                            foreach (string copyLocation in Settings.CurrentSettings.Backup.CopyTo) {
                                 string copyTo = Path.Combine(copyLocation, tempWorkingName);
                                 tempWorkingNames += copyTo + "\r\n";
 
@@ -263,4 +261,5 @@ namespace DragAndDropBackup {
         }
 
     }
+
 }

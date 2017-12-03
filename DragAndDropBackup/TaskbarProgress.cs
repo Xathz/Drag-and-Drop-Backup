@@ -61,5 +61,7 @@ namespace DragAndDropBackup {
                 taskbarInstance.SetProgressValue(windowHandle, (ulong)progressValue, (ulong)progressMax);
             }
         }
+
     }
+
 }
