@@ -27,9 +27,7 @@ namespace DragAndDropBackup {
 
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            Settings.SaveSettings();
-        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) => Settings.SaveSettings();
 
         private void MainForm_DragEnter(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
@@ -120,9 +118,7 @@ namespace DragAndDropBackup {
             _IsMouseDown = true;
         }
 
-        private void InfoLabel_MouseUp(object sender, MouseEventArgs e) {
-            _IsMouseDown = false;
-        }
+        private void InfoLabel_MouseUp(object sender, MouseEventArgs e) => _IsMouseDown = false;
 
         private void InfoLabel_MouseMove(object sender, MouseEventArgs e) {
             if (_IsMouseDown && e.Button == MouseButtons.Left) {
