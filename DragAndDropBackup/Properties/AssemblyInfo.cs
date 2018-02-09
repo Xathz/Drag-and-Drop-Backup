@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Xathz")]
 [assembly: AssemblyProduct("Drag and Drop Backup")]
-[assembly: AssemblyCopyright("Copyright © 2017, Xathz")]
+[assembly: AssemblyCopyright("Copyright © 2017-2018, Xathz")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
