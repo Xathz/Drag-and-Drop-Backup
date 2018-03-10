@@ -1,10 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using System.ComponentModel;
 
 namespace DragAndDropBackup {
 
@@ -23,9 +23,7 @@ namespace DragAndDropBackup {
             Location = new Point(Settings.CurrentSettings.General.WindowLocation.X, Settings.CurrentSettings.General.WindowLocation.Y);
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
-
-        }
+        private void MainForm_Load(object sender, EventArgs e) { }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) => Settings.SaveSettings();
 
@@ -84,8 +82,8 @@ namespace DragAndDropBackup {
                 }
             }
 
-            if (workingName == null) {
-                MessageBox.Show("workingName is null!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (string.IsNullOrWhiteSpace(workingName)) {
+                MessageBox.Show("workingName is blank or null!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Dispose();
             }
 
@@ -105,7 +103,6 @@ namespace DragAndDropBackup {
             TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Indeterminate);
 
             DoBackupBackgroundWorker.RunWorkerAsync(workerArgs);
-
         }
 
         private void MainForm_LocationChanged(object sender, EventArgs e) {
@@ -152,6 +149,8 @@ namespace DragAndDropBackup {
 
         private void BackupFiles(string workingFileList, string workingDirectory, string workingName) {
             string sevenZip = Settings.CurrentSettings.Backup.SevenZip;
+            string sevenZipMethods = Settings.CurrentSettings.Backup.SevenZipMethods;
+
             // M-d-yyyy
             string dateDate = DateTime.Now.ToString(Settings.CurrentSettings.Backup.DateFormat).ToLower();
             // h.mmtt
@@ -170,7 +169,7 @@ namespace DragAndDropBackup {
                 Application.Exit();
             }
 
-            string sevenZipArguments = "a \"" + workingName + "\" " + $"@{workingFileList}";
+            string sevenZipArguments = "a \"" + workingName + "\" " + $"@\"{workingFileList}\" {sevenZipMethods}";
 
 #if DEBUG  
             Debug.WriteLine(dateTime);

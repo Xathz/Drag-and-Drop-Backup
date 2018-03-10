@@ -21,8 +21,6 @@ Whatever you drag and drop into the program will be zipped using 7-Zip and saved
 
 The default one will be created when you run the program for the first time. There is no settings ui.
 
-The date and time formatting at [Github](https://github.com/dotnet/docs/blob/master/docs/standard/base-types/custom-date-and-time-format-strings.md) or [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
-
 ##### NameFormat
 
 |Variable|Meaning|Required|
@@ -30,6 +28,16 @@ The date and time formatting at [Github](https://github.com/dotnet/docs/blob/mas
 |%F|File name (auto generated)|Yes|
 |%D|Date|No|
 |%T|Time|No|
+
+##### DateFormat / TimeFormat
+
+Date and time formatting documentation at [Github](https://github.com/dotnet/docs/blob/master/docs/standard/base-types/custom-date-and-time-format-strings.md) or [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
+
+##### SevenZipMethods
+
+This is for additional/custom [method arguments](https://sevenzip.osdn.jp/chm/cmdline/switches/method.htm). It allows you to set the compression level, enable/disable multi-threading, and [many more](https://sevenzip.osdn.jp/chm/cmdline/switches/method.htm) options for 7-Zip.
+
+If you change the compression type it is recommended you change the `.zip` portion of **NameFormat** to match correctly.
 
 ##### Example
 
@@ -43,6 +51,7 @@ The date and time formatting at [Github](https://github.com/dotnet/docs/blob/mas
   },
   "Backup": {
     "SevenZip": "C:\\Program Files\\7-Zip\\7z.exe",
+    "SevenZipMethods": "-mx=7",
     "NameFormat": "%F Backup %D %T.zip",
     "DateFormat": "M-d-yyyy",
     "TimeFormat": "h.mmtt",

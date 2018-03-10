@@ -33,7 +33,7 @@ namespace DragAndDropBackup {
         /// </summary>
         public void LoadSettings() {
             try {
-                if (!File.Exists(_SettingsLocation)) { throw new FileNotFoundException("Settings file was not found!", _SettingsLocation); }
+                if (!File.Exists(_SettingsLocation)) { SaveSettings(); }
 
                 using (StreamReader jsonFile = File.OpenText(_SettingsLocation)) {
                     JsonSerializer jsonSerializer = new JsonSerializer();
@@ -92,6 +92,14 @@ namespace DragAndDropBackup {
             /// The path to 7-Zip. Default: C:\Program Files\7-Zip\7z.exe
             /// </summary>
             public string SevenZip { get; set; } = @"C:\Program Files\7-Zip\7z.exe";
+
+            /// <summary>
+            /// Additional 7-Zip method arguments. Default: -mx=7
+            /// </summary>
+            /// <remarks>
+            /// https://sevenzip.osdn.jp/chm/cmdline/switches/method.htm
+            /// </remarks>
+            public string SevenZipMethods { get; set; } = "-mx=7";
 
             /// <summary>
             /// The format of the backup zip. Default: %F Backup %D %T.zip
