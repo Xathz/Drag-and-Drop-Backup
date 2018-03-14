@@ -162,7 +162,8 @@ PublishScripts/
 # NuGet Packages
 *.nupkg
 # The packages folder can be ignored because of Package Restore
-**/packages/*
+# Disabled this ignore in an attempt to fix https://github.com/Xathz/Drag-and-Drop-Backup/issues/1
+# **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
