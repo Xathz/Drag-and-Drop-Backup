@@ -1,4 +1,2 @@
 language: csharp
-solution: "./DragAndDropBackup.sln"
-script:
-  - xbuild /p:Configuration=Release "./DragAndDropBackup.sln"
+solution: DragAndDropBackup.sln
