@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace DragAndDropBackup {
 
-    // From https://stackoverflow.com/a/24187171
+    /// <remarks>https://stackoverflow.com/a/24187171</remarks>
     public static class TaskbarProgress {
 
         public enum TaskbarStates {
@@ -18,6 +18,7 @@ namespace DragAndDropBackup {
         [Guid("ea1afb91-9e28-4b86-90e9-9e9f8a5eefaf")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         private interface ITaskbarList3 {
+
             // ITaskbarList
             [PreserveSig]
             void HrInit();
@@ -44,21 +45,20 @@ namespace DragAndDropBackup {
         [ComImport()]
         [Guid("56fdf344-fd6d-11d0-958a-006097c9a090")]
         [ClassInterface(ClassInterfaceType.None)]
-        private class TaskbarInstance {
-        }
+        private class TaskbarInstance { }
 
-        private static ITaskbarList3 taskbarInstance = (ITaskbarList3)new TaskbarInstance();
-        private static bool taskbarSupported = Environment.OSVersion.Version >= new Version(6, 1);
+        private static ITaskbarList3 _TaskbarInstance = (ITaskbarList3)new TaskbarInstance();
+        private static readonly bool _TaskbarSupported = Environment.OSVersion.Version >= new Version(6, 1);
 
         public static void SetState(IntPtr windowHandle, TaskbarStates taskbarState) {
-            if (taskbarSupported) {
-                taskbarInstance.SetProgressState(windowHandle, taskbarState);
+            if (_TaskbarSupported) {
+                _TaskbarInstance.SetProgressState(windowHandle, taskbarState);
             }
         }
 
         public static void SetValue(IntPtr windowHandle, double progressValue, double progressMax) {
-            if (taskbarSupported) {
-                taskbarInstance.SetProgressValue(windowHandle, (ulong)progressValue, (ulong)progressMax);
+            if (_TaskbarSupported) {
+                _TaskbarInstance.SetProgressValue(windowHandle, (ulong)progressValue, (ulong)progressMax);
             }
         }
 

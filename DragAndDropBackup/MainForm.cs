@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,6 +16,8 @@ namespace DragAndDropBackup {
         private bool _IsMouseDown = false;
         private string _TempFile;
 
+        private Backup backupTest;
+
         public MainForm() {
             InitializeComponent();
 
@@ -23,9 +26,24 @@ namespace DragAndDropBackup {
             Location = new Point(Settings.CurrentSettings.General.WindowLocation.X, Settings.CurrentSettings.General.WindowLocation.Y);
         }
 
-        private void MainForm_Load(object sender, EventArgs e) { }
+        private void MainForm_Load(object sender, EventArgs e) {
+            // TODO Testing only
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) => Settings.SaveSettings();
+            List<string> testList = new List<string> { "one", "two", "three" };
+            string[] testStringList = { "one", "two", "three" };
+
+            backupTest = new Backup(testStringList);
+
+
+
+
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            Settings.SaveSettings();
+
+            backupTest.Dispose();
+        }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
